@@ -3,6 +3,8 @@
 A premium **Next.js 16** portfolio with a talking-head hero video, floating particle layer, scroll-reveal animations, and a dark cinematic aesthetic.
 
 ---
+<img width="1269" height="704" alt="Screenshot 2026-06-30 at 10 11 28 AM" src="https://github.com/user-attachments/assets/e278a1dd-7ead-4e2f-bafb-82407e094905" />
+<img width="1271" height="710" alt="Screenshot 2026-06-30 at 10 12 00 AM" src="https://github.com/user-attachments/assets/9a1c2628-83c3-48c3-a31b-74ef5b44c956" />
 
 ## ⚡ Quick Start (Run Locally)
 

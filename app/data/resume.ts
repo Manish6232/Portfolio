@@ -6,12 +6,14 @@ export const RESUME = {
     "From fixing Redis race conditions under load to deploying ERC-1155 smart contracts on Polygon — I care about the details that make software reliable and the ideas that make it meaningful.",
     "Ranked 2,519 out of 24,000+ in LeetCode Biweekly Contest 145. Unstop Global Rank 2,805. LinkedIn Top 10% SSI.",
   ],
-  contact: "+91 6263310631",
-  email: "Manishsingh626332@gmail.com",
+  contact: "https://x.com/ManishS22456273",
+  email: "manishsingh626331@gmail.com",
   links: {
     github: "https://github.com/Manish6232",
     linkedin: "https://www.linkedin.com/in/manish-rajak-bb4aaa28b/",
     leetcode: "https://leetcode.com/u/manishsingh62/",
+    x: "https://x.com/ManishS22456273",
+    resume: "https://drive.google.com/file/d/1QVAlMAMgv8yGG7buBt5yUu6LFUYXs82V/view?usp=sharing",
   },
   stats: [
     { value: "400+", label: "DSA Problems Solved" },

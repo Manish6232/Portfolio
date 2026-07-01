@@ -1,4 +1,5 @@
 "use client";
+import type { FormEvent } from "react";
 import { RESUME } from "../data/resume";
 import { useReveal } from "./RevealUtils";
 
@@ -10,10 +11,10 @@ const CONTACT_LINKS = [
     icon: "@",
   },
   {
-    label: "WhatsApp",
-    value: RESUME.contact,
-    href: `https://wa.me/${RESUME.contact.replace(/\D/g, "")}?text=${encodeURIComponent("Hi Manish, I saw your portfolio and would like to connect.")}`,
-    icon: "WA",
+    label: "X",
+    value: "@ManishS22456273",
+    href: RESUME.links.x,
+    icon: "X",
   },
   {
     label: "LinkedIn",
@@ -27,10 +28,38 @@ const CONTACT_LINKS = [
     href: RESUME.links.github,
     icon: "GH",
   },
+  {
+    label: "LeetCode",
+    value: "manishsingh62",
+    href: RESUME.links.leetcode,
+    icon: "LC",
+  },
+  {
+    label: "Resume",
+    value: "Download CV",
+    href: RESUME.links.resume,
+    icon: "CV",
+  },
 ];
 
 export default function ContactSection() {
   const ref = useReveal();
+
+  function handleMessageSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    const formData = new FormData(event.currentTarget);
+    const name = String(formData.get("name") || "").trim();
+    const email = String(formData.get("email") || "").trim();
+    const message = String(formData.get("message") || "").trim();
+
+    const subject = encodeURIComponent(`Portfolio message from ${name || "Visitor"}`);
+    const body = encodeURIComponent(
+      [`Name: ${name}`, `Email: ${email}`, "", message].join("\n")
+    );
+
+    window.location.href = `mailto:${RESUME.email}?subject=${subject}&body=${body}`;
+  }
 
   return (
     <>
@@ -72,12 +101,12 @@ export default function ContactSection() {
 
           .contact-grid {
             display: grid;
-            grid-template-columns: repeat(4, minmax(0, 1fr));
+            grid-template-columns: repeat(3, minmax(0, 1fr));
             gap: clamp(1rem, 2.4vw, 1.8rem);
           }
 
           .contact-card {
-            min-height: clamp(250px, 27vw, 320px);
+            min-height: clamp(220px, 23vw, 280px);
             position: relative;
             display: flex;
             flex-direction: column;
@@ -150,6 +179,85 @@ export default function ContactSection() {
             overflow-wrap: anywhere;
           }
 
+          .message-form {
+            width: min(100%, 820px);
+            margin: clamp(2.2rem, 4vw, 3.4rem) auto 0;
+            padding: clamp(1.25rem, 3vw, 2.1rem);
+            border: 2px solid rgba(174,184,194,0.28);
+            border-radius: 1.2rem;
+            background: #0f1015;
+            text-align: left;
+          }
+
+          .message-fields {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 1rem;
+          }
+
+          .message-label {
+            display: grid;
+            gap: 0.55rem;
+            color: #858b93;
+            font-size: 0.72rem;
+            font-weight: 900;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+          }
+
+          .message-label-full {
+            grid-column: 1 / -1;
+          }
+
+          .message-input {
+            width: 100%;
+            border: 1px solid rgba(215,221,229,0.22);
+            border-radius: 0.8rem;
+            background: #171820;
+            color: #d7dde5;
+            font: inherit;
+            font-size: 1rem;
+            font-weight: 700;
+            letter-spacing: 0;
+            outline: none;
+            padding: 0.95rem 1rem;
+            transition: border-color 0.2s ease, background 0.2s ease;
+          }
+
+          .message-input:focus {
+            border-color: #d7dde5;
+            background: #1b1d27;
+          }
+
+          .message-input::placeholder {
+            color: rgba(133,139,147,0.72);
+          }
+
+          .message-textarea {
+            min-height: 150px;
+            resize: vertical;
+          }
+
+          .message-submit {
+            margin-top: 1rem;
+            border: 0;
+            border-radius: 999px;
+            background: #d7dde5;
+            color: #050505;
+            cursor: pointer;
+            font-family: var(--font-display);
+            font-size: 1rem;
+            font-weight: 900;
+            letter-spacing: 0;
+            padding: 0.95rem 1.35rem;
+            transition: transform 0.2s ease, background 0.2s ease;
+          }
+
+          .message-submit:hover {
+            transform: translateY(-2px);
+            background: #ffffff;
+          }
+
           @media (max-width: 1050px) {
             .contact-grid {
               grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -163,6 +271,10 @@ export default function ContactSection() {
 
             .contact-card {
               min-height: 230px;
+            }
+
+            .message-fields {
+              grid-template-columns: 1fr;
             }
           }
         `}</style>
@@ -194,6 +306,46 @@ export default function ContactSection() {
               </a>
             ))}
           </div>
+
+          <form data-reveal className="message-form" onSubmit={handleMessageSubmit}>
+            <div className="message-fields">
+              <label className="message-label">
+                Name
+                <input
+                  className="message-input"
+                  name="name"
+                  type="text"
+                  placeholder="Your name"
+                  required
+                />
+              </label>
+
+              <label className="message-label">
+                Email ID
+                <input
+                  className="message-input"
+                  name="email"
+                  type="email"
+                  placeholder="you@example.com"
+                  required
+                />
+              </label>
+
+              <label className="message-label message-label-full">
+                Message
+                <textarea
+                  className="message-input message-textarea"
+                  name="message"
+                  placeholder="Write your message"
+                  required
+                />
+              </label>
+            </div>
+
+            <button className="message-submit" type="submit">
+              Send Message
+            </button>
+          </form>
         </div>
       </section>
 

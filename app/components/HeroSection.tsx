@@ -66,100 +66,45 @@ export default function HeroSection() {
         background: "var(--dark)",
       }}
     >
-      {/* ── Blurred ambient background video ── */}
+      {/* ── Full-bleed video; copy remains in the foreground ── */}
       <div
-        style={{
-          position: "absolute", inset: 0, zIndex: 0, overflow: "hidden",
-        }}
-      >
-        <video
-          autoPlay muted loop playsInline
-          src="/hero.mp4"
-          style={{
-            width: "100%", height: "100%",
-            objectFit: "cover",
-            filter: "grayscale(1) blur(32px) brightness(0.15) contrast(1.2)",
-            transform: "scale(1.15)",
-          }}
-        />
-      </div>
-
-      {/* ── Foreground talking-head video (right half) ── */}
-      <div
+        className="hero-video-panel"
         style={{
           position: "absolute",
-          right: 0, top: 0, bottom: 0,
-          width: "55%",
+          top: "var(--nav-height)",
+          right: 0,
+          bottom: 0,
+          left: 0,
           zIndex: 1,
           overflow: "hidden",
         }}
-        className="hidden md:block"
       >
         <video
           ref={fgRef}
           autoPlay muted loop playsInline
           src="/hero.mp4"
+          className="hero-video"
           style={{
             width: "100%", height: "100%",
             objectFit: "cover",
-            objectPosition: "top center",
-            filter: "grayscale(1) contrast(1.08)",
-          }}
-        />
-        {/* Left fade into content */}
-        <div
-          style={{
-            position: "absolute", inset: 0,
-            background:
-              "linear-gradient(to right, var(--dark) 0%, rgba(8,8,8,0.75) 30%, rgba(8,8,8,0.1) 70%, rgba(8,8,8,0) 100%)",
-          }}
-        />
-        {/* Bottom fade */}
-        <div
-          style={{
-            position: "absolute", bottom: 0, left: 0, right: 0, height: "40%",
-            background: "linear-gradient(to top, var(--dark) 0%, transparent 100%)",
-          }}
-        />
-        {/* Top fade */}
-        <div
-          style={{
-            position: "absolute", top: 0, left: 0, right: 0, height: "18%",
-            background: "linear-gradient(to bottom, var(--dark) 0%, transparent 100%)",
+            objectPosition: "72% top",
+            filter: "brightness(0.92) contrast(1.04)",
           }}
         />
       </div>
 
-      {/* ── Cinematic diagonal overlay ── */}
-      <div
-        style={{
-          position: "absolute", inset: 0, zIndex: 2,
-          background:
-            "linear-gradient(115deg, rgba(8,8,8,0.96) 0%, rgba(8,8,8,0.7) 45%, rgba(8,8,8,0.05) 100%)",
-        }}
-      />
-
       {/* ── Particles ── */}
       <ParticleCanvas />
 
-      {/* ── White accent glow top-left ── */}
-      <div
-        style={{
-          position: "absolute", top: "-20%", left: "-10%",
-          width: "50vw", height: "60vh",
-          background: "radial-gradient(ellipse, rgba(255,255,255,0.08) 0%, transparent 70%)",
-          zIndex: 2, pointerEvents: "none",
-        }}
-      />
 
       {/* ── Content ── */}
       <div
         style={{
           position: "relative", zIndex: 4,
-          padding: "0 3rem", maxWidth: "720px",
-          marginTop: "4rem",
+          padding: "0 3rem", maxWidth: "760px",
+          marginTop: "var(--nav-height)",
         }}
-        className="px-6 md:px-12"
+        className="hero-content px-6 md:px-12"
       >
         {/* Eyebrow */}
         <p
@@ -169,6 +114,7 @@ export default function HeroSection() {
             textTransform: "uppercase", color: "var(--orange)",
             marginBottom: "1.75rem",
             display: "flex", alignItems: "center", gap: "0.8rem",
+            textShadow: "var(--hero-copy-shadow)",
           }}
         >
           <span
@@ -185,23 +131,24 @@ export default function HeroSection() {
           className="hero-title-buffer"
           style={{
             fontFamily: "var(--font-display)",
-            fontSize: "clamp(4rem, 10vw, 9rem)",
+            fontSize: "clamp(4.35rem, 8.4vw, 8.25rem)",
             fontWeight: 700,
-            lineHeight: 0.88,
-            letterSpacing: "-0.05em",
+            lineHeight: 0.84,
+            letterSpacing: "-0.055em",
+            maxWidth: "6.2ch",
           }}
         >
           <span
             ref={firstRef as React.RefObject<HTMLSpanElement>}
             className="hero-buffer-line"
-            style={{ display: "block", color: "var(--text)" }}
+            style={{ display: "block", color: "var(--text)", textShadow: "var(--hero-title-shadow)" }}
           >
             {RESUME.name.first}
           </span>
           <span
             ref={lastRef as React.RefObject<HTMLSpanElement>}
             className="hero-buffer-line hero-buffer-line-accent"
-            style={{ display: "block", color: "var(--orange)" }}
+            style={{ display: "block", color: "var(--orange)", textShadow: "var(--hero-title-shadow)" }}
           >
             {RESUME.name.last}
           </span>
@@ -212,11 +159,12 @@ export default function HeroSection() {
           ref={subRef as React.RefObject<HTMLParagraphElement>}
           style={{
             marginTop: "2rem", fontSize: "1rem",
-            color: "var(--muted)", lineHeight: 1.8,
+            color: "var(--text)", lineHeight: 1.8, textShadow: "var(--hero-copy-shadow)",
             maxWidth: "420px",
           }}
+          className="hero-description"
         >
-          Building production-grade systems — real-time queues, AI-powered civic tools, and blockchain platforms. B.Tech @ BIT Bengaluru.
+          Building scalable web applications with AI integration and real-time features. B.Tech @ BIT Bengaluru.
         </p>
 
         {/* CTAs */}
@@ -229,12 +177,13 @@ export default function HeroSection() {
           }}
         >
           <button
+            className="hero-action-button hero-primary-button"
             onClick={() =>
               document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" })
             }
             style={{
               padding: "0.85rem 2.25rem",
-              background: "var(--orange)", color: "#000",
+              background: "var(--orange)", color: "var(--button-ink)",
               border: "none", borderRadius: "4px",
               fontWeight: 700, fontSize: "0.85rem",
               letterSpacing: "0.04em", cursor: "pointer",
@@ -252,13 +201,14 @@ export default function HeroSection() {
             View My Work
           </button>
           <button
+            className="hero-action-button hero-secondary-button"
             onClick={() =>
               document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })
             }
             style={{
               padding: "0.85rem 2.25rem",
               background: "transparent",
-              border: "1px solid rgba(255,255,255,0.15)",
+              border: "1px solid var(--border)",
               color: "var(--text)",
               borderRadius: "4px",
               fontSize: "0.85rem",
@@ -267,11 +217,11 @@ export default function HeroSection() {
               transition: "all 0.2s",
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.borderColor = "rgba(255,255,255,0.4)";
+              e.currentTarget.style.borderColor = "var(--button-border-hover)";
               e.currentTarget.style.transform = "translateY(-2px)";
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.borderColor = "rgba(255,255,255,0.15)";
+              e.currentTarget.style.borderColor = "var(--border)";
               e.currentTarget.style.transform = "none";
             }}
           >

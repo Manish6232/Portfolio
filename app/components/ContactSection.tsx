@@ -11,10 +11,10 @@ const CONTACT_LINKS = [
     icon: "@",
   },
   {
-    label: "X",
-    value: "@ManishS22456273",
-    href: RESUME.links.x,
-    icon: "X",
+    label: "Phone",
+    value: RESUME.phone,
+    href: `tel:${RESUME.phone}`,
+    icon: "PH",
   },
   {
     label: "LinkedIn",

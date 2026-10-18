@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
+import { RESUME } from "../data/resume";
 
 const NAV_ITEMS = ["About", "Experience", "Projects", "Achievements", "Contact"];
 
@@ -7,6 +8,8 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [active, setActive] = useState("");
   const [menuOpen, setMenuOpen] = useState(false);
+  // Keep the server and first browser render identical; restore a saved choice after hydration.
+  const [theme, setTheme] = useState<"dark" | "light">("dark");
   const indicatorRef = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
@@ -24,6 +27,26 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme;
+  }, [theme]);
+
+  useEffect(() => {
+    const frame = window.requestAnimationFrame(() => {
+      if (window.localStorage.getItem("portfolio-theme") === "light") {
+        setTheme("light");
+      }
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, []);
+
+  const toggleTheme = () => {
+    const nextTheme = theme === "dark" ? "light" : "dark";
+    setTheme(nextTheme);
+    document.documentElement.dataset.theme = nextTheme;
+    window.localStorage.setItem("portfolio-theme", nextTheme);
+  };
+
   const scrollTo = (id: string) => {
     setMenuOpen(false);
     document.getElementById(id.toLowerCase())?.scrollIntoView({ behavior: "smooth" });
@@ -36,13 +59,14 @@ export default function Navbar() {
           position: "fixed",
           top: 0, left: 0, right: 0,
           zIndex: 200,
-          padding: scrolled ? "0.9rem 2.5rem" : "1.3rem 2.5rem",
+          height: "var(--nav-height)",
+          padding: "0 2.5rem",
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          background: scrolled ? "rgba(8,8,8,0.9)" : "rgba(8,8,8,0.2)",
-          backdropFilter: "blur(24px)",
-          borderBottom: `1px solid ${scrolled ? "rgba(255,255,255,0.06)" : "transparent"}`,
+          background: "var(--nav-surface)",
+          backdropFilter: scrolled ? "blur(24px)" : "blur(18px)",
+          borderBottom: "1px solid var(--border)",
           transition: "all 0.4s cubic-bezier(0.16,1,0.3,1)",
         }}
       >
@@ -80,15 +104,15 @@ export default function Navbar() {
                     fontWeight: 500,
                     letterSpacing: "0.06em",
                     textTransform: "uppercase",
-                    color: isActive ? "var(--orange)" : "var(--muted)",
-                    background: isActive ? "rgba(255,255,255,0.12)" : "transparent",
+                    color: isActive ? "var(--orange)" : "var(--nav-link)",
+                    background: isActive ? "var(--nav-active)" : "transparent",
                     transition: "all 0.2s",
                   }}
                   onMouseEnter={(e) => {
-                    if (!isActive) e.currentTarget.style.color = "var(--text)";
+                    if (!isActive) e.currentTarget.style.color = "var(--orange)";
                   }}
                   onMouseLeave={(e) => {
-                    if (!isActive) e.currentTarget.style.color = "var(--muted)";
+                    if (!isActive) e.currentTarget.style.color = "var(--nav-link)";
                   }}
                 >
                   {item}
@@ -100,7 +124,7 @@ export default function Navbar() {
 
         {/* CTA */}
         <a
-          href="mailto:Manishsingh626332@gmail.com"
+          href={`mailto:${RESUME.email}`}
           style={{
             fontSize: "0.72rem", fontWeight: 600,
             padding: "0.5rem 1.3rem",
@@ -113,7 +137,7 @@ export default function Navbar() {
           }}
           onMouseEnter={(e) => {
             e.currentTarget.style.background = "var(--orange)";
-            e.currentTarget.style.color = "#000";
+            e.currentTarget.style.color = "var(--ink)";
           }}
           onMouseLeave={(e) => {
             e.currentTarget.style.background = "transparent";
@@ -124,19 +148,30 @@ export default function Navbar() {
           EMAIL ME
         </a>
 
-        {/* Hamburger */}
-        <button
-          onClick={() => setMenuOpen(!menuOpen)}
-          style={{
-            background: "none", border: "1px solid var(--border)",
-            borderRadius: "6px", padding: "0.4rem 0.6rem",
-            cursor: "pointer", color: "var(--text)", fontSize: "1.1rem",
-          }}
-          className="flex md:hidden"
-          aria-label="Toggle menu"
-        >
-          {menuOpen ? "✕" : "☰"}
-        </button>
+        <div style={{ display: "flex", alignItems: "center", gap: "0.65rem" }}>
+          <button
+            onClick={toggleTheme}
+            className="theme-toggle"
+            aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
+            title={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
+          >
+            <span className="theme-icon">🌙</span>
+            <span className="theme-icon theme-sun">☀️</span>
+          </button>
+
+          <button
+            onClick={() => setMenuOpen(!menuOpen)}
+            style={{
+              background: "none", border: "1px solid var(--border)",
+              borderRadius: "6px", padding: "0.4rem 0.6rem",
+              cursor: "pointer", color: "var(--text)", fontSize: "1.1rem",
+            }}
+            className="flex md:hidden"
+            aria-label="Toggle menu"
+          >
+            {menuOpen ? "✕" : "☰"}
+          </button>
+        </div>
       </nav>
 
       {/* Mobile Menu */}
@@ -144,7 +179,7 @@ export default function Navbar() {
         <div
           style={{
             position: "fixed", inset: 0, zIndex: 190,
-            background: "rgba(8,8,8,0.98)",
+            background: "var(--dark)",
             backdropFilter: "blur(20px)",
             display: "flex", flexDirection: "column",
             alignItems: "center", justifyContent: "center", gap: "2rem",
@@ -168,7 +203,7 @@ export default function Navbar() {
             </button>
           ))}
           <a
-            href="mailto:Manishsingh626332@gmail.com"
+            href={`mailto:${RESUME.email}`}
             style={{
               marginTop: "1rem", padding: "0.75rem 2.5rem",
               border: "1px solid var(--orange)", borderRadius: "4px",

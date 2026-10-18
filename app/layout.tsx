@@ -4,7 +4,7 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "Manish Rajak — Full Stack Engineer",
   description:
-    "Full Stack Engineer & Builder. React, Next.js, Node.js, AI integration, blockchain. B.Tech @ BIT Bengaluru.",
+    "Software Engineer building scalable web applications with AI integration and real-time features. B.Tech @ BIT Bengaluru.",
   keywords: ["Manish Rajak", "Full Stack Engineer", "React", "Next.js", "Node.js", "Portfolio"],
 };
 
@@ -14,7 +14,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
@@ -23,7 +23,7 @@ export default function RootLayout({
           crossOrigin="anonymous"
         />
         <link
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;0,900;1,600;1,700&display=swap"
           rel="stylesheet"
         />
       </head>
